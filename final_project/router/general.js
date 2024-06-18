@@ -21,8 +21,14 @@ public_users.get('/', function (req, res) {
 public_users.get('/isbn/:isbn', function (req, res) {
   const isbn = req.params.isbn;
 
-  if (books[isbn]) {
-    res.send(books[isbn]);
+  // Convert the books object to an array of book objects
+  const booksArray = Object.values(books);
+
+  // Find the book with the matching ISBN
+  const book = booksArray.find(book => book.isbn === isbn);
+  
+  if (book) {
+    res.send(book);
   } else {
     res.send({ message:"Book does not exist"});
   }
