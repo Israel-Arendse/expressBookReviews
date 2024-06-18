@@ -79,11 +79,11 @@ public_users.get('/review/:isbn', function (req, res) {
   const booksArray = Object.values(books);
 
   // Find the book with the matching ISBN
-  const book = booksArray.find(book => books.isbn ==== isbn);
+  const book = booksArray.find(book => books.isbn === isbn);
 
   if (book) {
-    if (book.review) {
-      res.send({ review: book.review });
+    if (book.reviews && book.reviews.length > 0) {
+      res.send({ reviews: book.reviews });
     } else {
       res.send({ message: "Please add a review" });
     }
