@@ -72,9 +72,24 @@ public_users.get('/title/:title',function (req, res) {
 });  
   
 //  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+public_users.get('/review/:isbn', function (req, res) {
+  const isbn = decodeURIComponent(req.params.isbn);
+
+  // Convert the books object to an array of book objects
+  const booksArray = Object.values(books);
+
+  // Find the book with the matching ISBN
+  const book = booksArray.find(book => books.isbn ==== isbn);
+
+  if (book) {
+    if (book.review) {
+      res.send({ review: book.review });
+    } else {
+      res.send({ message: "Please add a review" });
+    }
+  } else {
+    res.send({ message: "Book does not exist" });
+  }
 });
 
 module.exports.general = public_users;
