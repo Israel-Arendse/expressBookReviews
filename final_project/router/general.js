@@ -54,10 +54,23 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+  const title = decodeURIComponent (req.params.title);
 
+  // Converts the book object to an array of book objects
+  // to access author property
+  const booksArray = Object.values(books);
+
+ // Finds the book with the matching title
+ const book = booksArray.find(book => book.title === title);
+
+  if(book){
+    res.send(book);
+  } else {
+    res.send({message: "Title not found"});
+  }
+
+});  
+  
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
