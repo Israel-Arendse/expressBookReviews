@@ -21,17 +21,22 @@ public_users.post("/register", (req,res) => {
     }
   };
 
-  if (username && password) {
-    if (!doesExist(username)){
-      users.push({ "username": username, "password": password});
-      return res.status(200).json({ message: "User successfully registered. Now you can log in"});
-    } else {
-      return res.status(404).json({ message: "User already exists!" });
-    }
+ if(!username&&!password){
+    return res.status(200).json({message: "Username and password are required"}); //Returns a message if username and password are required
+  } else if (!username) {
+    return res.status(400).json({message: "Username is required"}); //Returns a message if username is required 
+  } else if (!password) {
+    return res.status(400).json({ message: "Password is required"}); //Returns a message if username is required
+  } else if (!doesExist(username)){
+    users.push({username: username, password: password});
+    return res.status(200).json({message: "User successfully registered. Now you can log in"}); //Returns a message if user is successfully registered
+  } else if (doesExist(username)) {
+    return res.status(400).json({message: "User already exists"}); // Returns a message if user already exists
+  } else {
+    return res.status(400).json({message: "Unable to register user"}); // Returns a message if the code is unable to register user
   }
+});  
 
-  return res.status(404).json({message:"Unable to register user"});
-});
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
