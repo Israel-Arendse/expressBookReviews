@@ -6,19 +6,8 @@ const public_users = express.Router();
 
 // Registers Public users to the bookshop
 public_users.post("/register", (req,res) => {
-
-// The user must provide a username and a password
   const username = req.body.username;
   const password = req.body.password;
-
-  if(username&&password){
-    if(!doesExists(username)){
-      users.push({"username":username, "password":password});
-      return res.status(200).json({message: "User successfully registered. Now you can log in"});
-    } else {
-      return res.status(404).json({message: "User already exists!"});
-    }
-  }
 
   // Checks if the user with the username already exist
   const doesExist = (username)=>{
@@ -29,6 +18,15 @@ public_users.post("/register", (req,res) => {
       return true;
     } else{
       return false;
+    }
+  };
+
+  if (username && password) {
+    if (!doesExist(username)){
+      users.push({ "username": username, "password": password});
+      return res.status(200).json({ message: "User successfully registered. Now you can log in"});
+    } else {
+      return res.status(404).json({ message: "User already exists!" });
     }
   }
 
@@ -96,7 +94,7 @@ public_users.get('/title/:title',function (req, res) {
 
 });  
   
-//  Get book review
+//  Get book reviews based on the isbn
 public_users.get('/review/:isbn', function (req, res) {
   const isbn = decodeURIComponent(req.params.isbn);
 
@@ -104,7 +102,7 @@ public_users.get('/review/:isbn', function (req, res) {
   const booksArray = Object.values(books);
 
   // Find the book with the matching ISBN
-  const book = booksArray.find(book => books.isbn === isbn);
+  const book = booksArray.find(book => book.isbn === isbn);
 
   if (book) {
     if (book.reviews && book.reviews.length > 0) {
