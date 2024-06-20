@@ -30,7 +30,8 @@ regd_users.post("/login", (req,res) => {
 
 });
 
-app.user("/customer/login", regd_users); //Sets the endpoint for login to "/customer/login"
+//Sets the endpoint for login to "/customer/login"
+regd_users.use("/customer/login", regd_users);
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
