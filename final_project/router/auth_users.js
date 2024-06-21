@@ -11,7 +11,7 @@ let users = [
 ];
 
 const isValid = (username)=>{ //returns boolean to show if username is valid or not.
-  return username.length >= 6 && /^[a-z0-9]+$/i.test(username);
+  return username.length >= 6 && /[a-z]i.test(username) && /[0-9]+/.test(username);
 }
 
 const authenticatedUser = (username,password)=>{
