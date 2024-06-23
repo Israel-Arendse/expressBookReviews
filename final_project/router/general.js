@@ -28,7 +28,7 @@ public_users.post("/register", (req,res) => {
   } else if (!password) {
     return res.status(400).json({ message: "Password is required"}); //Returns a message if password is required
   } else if (!isValid(username)){
-    return res.status(400).json({message: "Username must be at least 6 characters long and contain both letters & numbers"}); //Returns a message if username isValid
+    return res.status(400).json({message: "Username must be at least 6 characters long and contain both letters & numbers"}); //Returns a message if username is invalid
   } else if (!doesExist(username)){                                                                                            
     users.push({username: username, password: password});
     return res.status(200).json({message: "User successfully registered. Now you can log in"}); //Returns a message if user is successfully registered
