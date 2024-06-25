@@ -37,8 +37,8 @@ regd_users.use("/customer/login", regd_users);
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = decodeURIComponent(req.params.isbn);
-  const reviews = decodeURIComponent(req.query.reviews);
-  const username = req.query.review;
+  const review = decodeURIComponent(req.query.review); // Puts the reviews in the url
+  const username = req.session.username; // Retrieves the username stored in the session
 
   //Find the book with the given ISBN
   const bookKey = Object.keys(books).find(key => books[key].isbn === isbn);
@@ -48,12 +48,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     return res.status(404).json({message: "Book not found"});
   }
 
-  //Add the review to the book's reviews array
-  book.reviews[username] = reviews;
-
-  return res.status(200).json({message: "Review added successfully"});
-});
-
+  // Check if a review from the user already exists
+  if(book.reviews[username]){
+    // Update the existing review
+    book.reviews[username] = review;
+    return res.status(200).json({message: "Review updated successfully"});
+  } else {
+    // Add a new review
+    book.reviews[username] = review;
+    return res.status(200).json({message: "Review added successfully"});
+  }
 });
 
 module.exports.authenticated = regd_users;
