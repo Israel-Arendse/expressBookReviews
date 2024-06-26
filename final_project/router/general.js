@@ -57,7 +57,7 @@ public_users.get("/", async function (req, res) {
 });
 
 
-// Get book details based on ISBN
+// Get book details based on the ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
    const isbn = req.params.isbn;
    console.log(`Getting book details based on the ISBN: ${isbn}...`);
@@ -86,23 +86,34 @@ public_users.get('/isbn/:isbn', function (req, res) {
    });
  });
 
-// Get book details based on author
+// Get book details based on the author
 public_users.get('/author/:author',function (req, res) {
   const author = decodeURIComponent(req.params.author);
-
-  // Converts the book object to an array of book objects
-  // to access author property
+  console.log(`Getting the book details based on the author: ${author}`);
+  
+   // Converts the book object to an array of book objects
   const booksArray = Object.values(books);
   
-  // Find the book with the matching author
+  new Promise((resolve, reject) => {
+  // Find the books with the matching author
   const book = booksArray.find(book => book.author === author);
 
-  if (book){
-    res.send(book);
+   if (book){
+    console.log(`Found  details on the books written by the Author: ${author}.`);
+    resolve(book);
   } else {
-    res.send({ message: "Author not listed"});
+    console.log(`No books located with the Author:${author} in the list.`)
+    reject(new Error( "Author not listed"));
   }
+ })
+ .then(book => {
+   res.send(book);
+ })
+ .catch(error => {
+   res.send({ message: error.message });
+  }); 
 });
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
