@@ -103,7 +103,8 @@ public_users.get('/title/:title',function (req, res) {
   
 //  Get book reviews based on the isbn
 public_users.get('/review/:isbn', function (req, res) {
-  const isbn = decodeURIComponent(req.params.isbn);
+  
+  const isbn = decodeURIComponent(req.params.isbn); // Get ISBN from the request
 
   // Convert the books object to an array of book objects
   const booksArray = Object.values(books);
@@ -112,10 +113,11 @@ public_users.get('/review/:isbn', function (req, res) {
   const book = booksArray.find(book => book.isbn === isbn);
 
   if (book) {
-    if (book.reviews && book.reviews.length > 0) {
-      res.send({ reviews: book.reviews });
+    // Check if the book.reviews is an empty object.
+    if (Object.keys(book.reviews).length === 0) {
+      res.send({ message: "Please add a review"});
     } else {
-      res.send({ message: "Please add a review" });
+      res.send({ reviews: book.reviews });
     }
   } else {
     res.send({ message: "Book does not exist" });
