@@ -7,12 +7,12 @@ let users = [];
 
 const isValid = (username)=>{ //returns boolean to show if the username is valid or not.
   return username.length >= 6 && /[a-z]+/i.test(username) && /[0-9]+/.test(username);
-}
+};
 
 const authenticatedUser = (username,password)=>{
    const user = users.find(user => user.username === username && user.password === password);
    return user !== undefined;
-}
+};
 
 //Only registered users can login
 regd_users.post("/login", (req,res) => {
@@ -58,6 +58,30 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     book.reviews[username] = review;
     return res.status(200).json({message: "Review added successfully"});
   }
+});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const isbn = decodeURIComponent(req.params.id);
+  const username = req.session.username;
+
+  // Find the book with the given ISBN
+  const bookKey = Object.keys(books).find(key => books[key].isbn === isbn);
+  const book = books[bookKey];
+
+  if(!book){
+    return res.status(404).json({message:"Book not found"});
+  }
+
+  // Check if a review from the user already exists
+  if(!book.reviews[username]) { 
+    return res.status(404).json({message: "Review not found"})
+  }
+
+  // Delete the user's review
+  delete book.reviews[username];
+
+  return res.status(200).json({message: "Review deleted successfully"});
 });
 
 module.exports.authenticated = regd_users;
