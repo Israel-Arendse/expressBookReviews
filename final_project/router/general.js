@@ -135,25 +135,25 @@ public_users.get('/title/:title',function (req, res) {
 });  
   
 //  Get book reviews based on the isbn
-public_users.get('/review/:isbn', function (req, res) {
-  
+public_users.get('/review/:isbn', async function (req, res) {
   const isbn = (req.params.isbn); // Get ISBN from the request
-
-  // Convert the books object to an array of book objects
   const booksArray = Object.values(books);
 
-  // Find the book with the matching ISBN
-  const book = booksArray.find(book => book.isbn === isbn);
 
+try{ // Searches for the book reviews based on the isbn
+  const book = booksArray.find(book => book.isbn === isbn); 
   if (book) {
+      throw new Error("Book does not exist");
+   };
+
     // Check if the book.reviews is an empty object.
     if (Object.keys(book.reviews).length === 0) {
       res.send({ message: "Please add a review"});
     } else {
       res.send({ reviews: book.reviews });
-    }
-  } else {
-    res.send({ message: "Book does not exist" });
+    };
+  } catch(error) {
+    res.send({ message: error.message });
   }
 });
 
