@@ -1,5 +1,5 @@
 let books = {
-      1: {"isbn":"978-1-36731-5809-6", "author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },
+      1: {"isbn":"978-1-3673-5809-6", "author": "Chinua Achebe","title": "Things Fall Apart", "reviews": {} },
       2: {"isbn":"978-3-2388-5733-2", "author": "Hans Christian Andersen","title": "Fairy tales", "reviews": {} },
       3: {"isbn":"978-0-2465-4364-6", "author": "Dante Alighieri","title": "The Divine Comedy", "reviews": {} },
       4: {"isbn":"978-8-7922-3566-4", "author": "Unknown","title": "The Epic Of Gilgamesh", "reviews": {} },
