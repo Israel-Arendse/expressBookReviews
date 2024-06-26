@@ -104,7 +104,7 @@ public_users.get('/title/:title',function (req, res) {
 //  Get book reviews based on the isbn
 public_users.get('/review/:isbn', function (req, res) {
   
-  const isbn = decodeURIComponent(req.params.isbn); // Get ISBN from the request
+  const isbn = (req.params.isbn); // Get ISBN from the request
 
   // Convert the books object to an array of book objects
   const booksArray = Object.values(books);
