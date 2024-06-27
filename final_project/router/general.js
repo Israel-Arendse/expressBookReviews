@@ -20,7 +20,9 @@ public_users.post("/register", (req,res) => {
     } else{
       return false;
     }
-  };
+  });
+
+}:
 
  if(!username&&!password){
     return res.status(200).json({message: "Username and password are required"}); //Returns a message if username and password are required
