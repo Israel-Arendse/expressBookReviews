@@ -49,12 +49,13 @@ async function fetchBooks(){
 public_users.get("/", async function (req, res) {
     try{
       const books = await fetchBooks();
-      res.status(200).json(books);   
+      res.status(200).json(JSON.stringify(books,null));   
     } catch (error) {
       console.error('Error getting list of books ', error);
       res.status(500).json({ error: 'Internal server error'});
     }
 });
+
 
 // Get book details based on the ISBN
 public_users.get('/isbn/:isbn', async function (req, res) {
