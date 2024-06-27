@@ -4,6 +4,12 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+// Helps the function of a book based on its property
+const findBookByProperty = (property, value) => {
+    const booksArray = Object.values(books);
+    return booksArray.find(book => book[property] === value);
+};
+
 // Registers Public users to the bookshop
 public_users.post("/register", (req,res) => {
   const username = req.body.username;
@@ -56,18 +62,15 @@ public_users.get("/", async function (req, res) {
     }
 });
 
-
 // Get book details based on the ISBN
 public_users.get('/isbn/:isbn', async function (req, res) {
     const isbn = req.params.isbn;
     console.log(`Getting book details based on the ISBN: ${isbn}...`);
 
     try {
-        // Convert the books object to an array of book objects
-        const booksArray = Object.values(books);
-
-        // Find the book with the matching ISBN
-        const book = booksArray.find(book => book.isbn === isbn);
+        
+        // Find the book based on the property: 'isbn'
+        const book = findBookByProperty('isbn',isbn);
 
         if (book) {
             console.log(`Found book details based on the ISBN: ${isbn}.`);
@@ -87,11 +90,9 @@ public_users.get('/author/:author', async function (req, res) {
     console.log(`Getting the book details based on the author: ${author}`);
 
     try {
-        // Convert the books object to an array of book objects
-        const booksArray = Object.values(books);
-
-        // Find the book with the matching author
-        const book = booksArray.find(book => book.author === author);
+        
+        // Finds the book based on the property:'author'
+        const book = findBookByProperty('author', author);
 
         if (book) {
             console.log(`Found details on the books written by the Author: ${author}.`);
@@ -110,11 +111,9 @@ public_users.get('/title/:title', async function (req, res) {
     const title = decodeURIComponent(req.params.title);
 
     try {
-        // Convert the books object to an array of book objects
-        const booksArray = Object.values(books);
-
-        // Find the book with the matching title
-        const book = booksArray.find(book => book.title === title);
+        
+        // Finds the book based on the property:'title'
+        const book = findBookByProperty('title', title);
 
         if (book) {
             res.send(book);
@@ -131,9 +130,8 @@ public_users.get('/title/:title', async function (req, res) {
 public_users.get('/review/:isbn', async function (req, res) {
   const isbn = (req.params.isbn); // Get ISBN from the request
 
-  const booksArray = Object.values(books); // Converts the book object to array of book objects
-
-  const book = booksArray.find(book => book.isbn === isbn);  // Finds the book with the mathcing ISBN
+  // Finds the book reviews based on the property: 'isbn'
+  const book = findBookByProperty('isbn', isbn);
 
   if (book) {
     // Check if the book.reviews is an empty object.
@@ -149,3 +147,4 @@ public_users.get('/review/:isbn', async function (req, res) {
 
 
 module.exports.general = public_users;
+
