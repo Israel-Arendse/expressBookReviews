@@ -4,11 +4,6 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-// Helps the function of a book based on its property
-const findBookByProperty = (property, value) => {
-    const booksArray = Object.values(books);
-    return booksArray.find(book => book[property] === value);
-};
 
 // Registers Public users to the bookshop
 public_users.post("/register", (req,res) => {
@@ -46,6 +41,18 @@ public_users.post("/register", (req,res) => {
 });  
 
 
+// Helps the function of a book based on its property
+const findBookByProperty = (property, value) => {
+   return new Promise((resolve, reject) => {
+      const booksArray = Object.values(books);
+      const book = booksArray.find(book => book[property] === value);
+      if (book) {
+        resolve(book);
+      } else {
+        reject(new Error(`Book with ${property} ${value} does not exist`));
+      }
+    });
+
 async function fetchBooks(){
   return Promise.resolve(books);
 };
@@ -70,7 +77,7 @@ public_users.get('/isbn/:isbn', async function (req, res) {
     try {
         
         // Find the book based on the property: 'isbn'
-        const book = findBookByProperty('isbn',isbn);
+        const book = await findBookByProperty('isbn',isbn);
 
         if (book) {
             console.log(`Found book details based on the ISBN: ${isbn}.`);
@@ -92,7 +99,7 @@ public_users.get('/author/:author', async function (req, res) {
     try {
         
         // Finds the book based on the property:'author'
-        const book = findBookByProperty('author', author);
+        const book = await findBookByProperty('author', author);
 
         if (book) {
             console.log(`Found details on the books written by the Author: ${author}.`);
@@ -113,7 +120,7 @@ public_users.get('/title/:title', async function (req, res) {
     try {
         
         // Finds the book based on the property:'title'
-        const book = findBookByProperty('title', title);
+        const book =  await findBookByProperty('title', title);
 
         if (book) {
             res.send(book);
